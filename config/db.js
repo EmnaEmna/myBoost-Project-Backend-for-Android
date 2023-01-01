@@ -16,8 +16,8 @@ const connectDB = async () => {
 module.exports = connectDB
 */
 
-const 
-databaseName = 'appProjectGroup';
+
+const databaseName = 'appProjectGroup';
 
 mongoose.set('strictQuery', false)
 mongoose.set('debug', true);

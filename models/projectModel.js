@@ -24,10 +24,7 @@ const projectSchema = mongoose.Schema(
             type: String,
             required: [true, 'Please add a text value'],
           },
-          deadline: {
-            type: String,
-            required: true            
-        }
+         
     }
 );
 

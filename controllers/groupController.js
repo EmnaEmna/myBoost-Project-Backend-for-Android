@@ -8,18 +8,24 @@ const User = require('../models/userModel')
 // @desc    Get groups
 // @route   GET /api/groups
 const getGroups = asyncHandler(async (req, res) => {
-    const groupsFromGrp = await Group.find({user: req.userData._id})
-    const newGroups = [];
+    const groupsFromGrp = await Group.find({
+
+emails:req.userData.email
+
+    })
+    // console.log("aaaa " + groupsFromGrp)
+     const newGroups = [];
+
     for(let grpId in req.userData.groups){
-        const grp = await Group.findById(req.userData.groups[grpId]);
-        newGroups.push(grp);
-    }
-    console.log("from user: "+newGroups);
-    console.log("from grp: "+groupsFromGrp);
-    //remove duplicates
-    const groups = [...new Set([...newGroups, ...groupsFromGrp])];
-    console.log("groups: "+groups);
-    res.status(200).json(groups);
+   
+        const grp = await Group.find({emails: req.userData.groups[grpId]});
+     
+       newGroups.push(grp);
+     }
+
+    // //remove duplicates
+    // const groups = [...new Set([...newGroups, ...groupsFromGrp])];
+    res.status(200).json(groupsFromGrp);
 })
 
 const getGroupbyid = asyncHandler(async (req, res) => {
