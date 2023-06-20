@@ -1,7 +1,12 @@
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
-const User = require('../models/userModel')
-const nodemailer = require('nodemailer')
+// const jwt = require('jsonwebtoken')
+// const bcrypt = require('bcryptjs')
+// const User = require('../models/userModel')
+// const nodemailer = require('nodemailer')
+
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import User from '../models/userModel.js';
+import nodemailer from 'nodemailer';
 
 
 const JWT_SECRET='some super secret...';
@@ -9,8 +14,8 @@ const JWT_SECRET='some super secret...';
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
-	  user: 'espritpi2223@gmail.com',
-	  pass: 'tqsixkvtcxwquztx'
+	  user: '******************',
+	  pass: '****************'
 	}
   });
 
@@ -28,7 +33,7 @@ function generateCode()
 }
 
 // reset password 
- async function resetPassword (req, res) {
+export async function resetPassword (req, res) {
 	const { email, password,} = req.body;
 	const user = await User.findOne({ email });
 	if (!user) {
@@ -44,7 +49,7 @@ function generateCode()
 			};
 			};
 
-function forgot_password(req,res,next){
+      export function forgot_password(req,res,next){
   
   User.findOne({ "email": req.body.email }).then(user=>{
     if(!user) {
@@ -59,7 +64,7 @@ function forgot_password(req,res,next){
       res.status(200).json({msg:`password send to your email Mr./Mrs ${user.username}`});
 
       var mailOptions = {
-        from: 'espritpi2223@gmail.com',
+        from: '*************',
         to: req.body.email,
         subject: 'Password Reset Email ' ,
         text: `click the link to reset password ${link}`  ,
@@ -77,7 +82,7 @@ function forgot_password(req,res,next){
   });
 }
 ///reset_password_get/:email/:token
-function reset_password_get(req,res,next){
+export function reset_password_get(req,res,next){
   User.findOne({ "email": req.params.email }).then(user=>{
     if(!user) {
       res.send('No account with that email address exists.')
@@ -93,7 +98,7 @@ function reset_password_get(req,res,next){
     }
   });
 }
-async function reset_password_post(req,res){
+export async function reset_password_post(req,res){
   const {password,password2} = req.body
 const salt = await bcrypt.genSalt(10);
 const hashedPassword = await bcrypt.hash(password, salt)
@@ -123,7 +128,7 @@ const hashedPassword = await bcrypt.hash(password, salt)
 
 //MODIFY PROFILE
 
-async function editUser  (req, res) {
+export async function editUser  (req, res) {
 	const {email, name,} = req.body;
 	const user = await User.findOne({ email });
 
@@ -145,9 +150,64 @@ async function editUser  (req, res) {
     console.log("profile updated")
     return res.json({user})
 };
+//************************************************************************* */
+//------------------------------------------------------------------
+//--------------------------- use PROFILE MODEL for the picture and to get email nam picture of user
+//------------------------------ to add and edit profile image too -------------------------------------
 
-module.exports = {
 
-  editUser,resetPassword,forgot_password,reset_password_get,reset_password_post
+// const Profile = require('../models/profileModel');
 
+import Profile from '../models/profileModel.js'
+
+export function addProfilePic(req, res) {
+  console.log('I m in ADDDDDDD PROGILE PICTURE ----------------------------  get pic IN ')
+
+  const email = req.query.email; 
+  User.findOneAndUpdate(
+    email,
+    { userPic: `${req.protocol}://${req.get('host')}/img/${req.file.filename}` },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      res.status(200).json({
+        profilePic: updatedUser.userPic,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
 }
+
+
+export function getUserProfile(req, res) {
+  const email = req.query.email;
+console.log('I m in get PROGILE PICTURE ----------------------------  get pic IN ')
+  User.findOne({ email: email })
+    .select('email name userPic') // Specify the fields to include in the response
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.status(200).json({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        userPic: user.userPic, // Include the userPic field in the response
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+}
+
+
+// module.exports = {
+
+//   editUser,resetPassword,forgot_password,reset_password_get,reset_password_post,addProfilePic
+
+// }
+export default {
+  editUser,resetPassword,forgot_password,reset_password_get,reset_password_post,addProfilePic
+};

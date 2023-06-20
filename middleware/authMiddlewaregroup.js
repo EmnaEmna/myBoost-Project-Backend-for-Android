@@ -1,8 +1,13 @@
-const jwt = require('jsonwebtoken')
-const asyncHandler = require('express-async-handler')
-const Group = require('../models/groupModel')
+// const jwt = require('jsonwebtoken')
+// const asyncHandler = require('express-async-handler')
+// const Group = require('../models/groupModel')
+import jwt from 'jsonwebtoken';
+import asyncHandler from 'express-async-handler';
+import Group from '../models/groupModel.js';
 
-const protectgroup = asyncHandler(async (req, res, next) => {
+// Rest of your code...
+
+export const protectgroup = asyncHandler(async (req, res, next) => {
   let token
 
   if (
@@ -41,4 +46,4 @@ const protectgroup = asyncHandler(async (req, res, next) => {
 
 
 
-module.exports = { protectgroup }
+// module.exports = { protectgroup }

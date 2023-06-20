@@ -1,13 +1,21 @@
-const asyncHandler = require('express-async-handler')
-const jwt = require('jsonwebtoken')
+// const asyncHandler = require('express-async-handler')
+// const jwt = require('jsonwebtoken')
 
 
-const Group = require('../models/groupModel')
-const User = require('../models/userModel')
+// const Group = require('../models/groupModel')
+// const User = require('../models/userModel')
+import asyncHandler from 'express-async-handler';
+import jwt from 'jsonwebtoken';
+
+import Group from '../models/groupModel.js';
+import User from '../models/userModel.js';
+import Project from '../models/projectModel.js';
+
+// Rest of your code...
 
 // @desc    Get groups
 // @route   GET /api/groups
-const getGroups = asyncHandler(async (req, res) => {
+export const getGroups = asyncHandler(async (req, res) => {
     const groupsFromGrp = await Group.find({
 
 emails:req.userData.email
@@ -23,19 +31,19 @@ emails:req.userData.email
        newGroups.push(grp);
      }
 
-    // //remove duplicates
+     //remove duplicates
     // const groups = [...new Set([...newGroups, ...groupsFromGrp])];
     res.status(200).json(groupsFromGrp);
 })
 
-const getGroupbyid = asyncHandler(async (req, res) => {
+export const getGroupbyid = asyncHandler(async (req, res) => {
     const groups = await Group.findById({user: req.user.id})
     //findbyid
     res.status(200).json(groups)
 })
 
 
-const updateEmail = async (req, res) => {
+export const updateEmail = async (req, res) => {
     const {groupId,emailToEdit, newEmail} = req.body;
     const grp = await Group.findById(groupId);
     const emails = grp.emails;
@@ -96,7 +104,7 @@ const updateNameGroup = async (req, res) => {
 
 // @desc    create group
 // @route   POST /api/groups
-const creategroup = asyncHandler(async (req, res) => {
+export const creategroup = asyncHandler(async (req, res) => {
     // console.log("***********" + req.userData);
     //console.log("+++++++++++++++++" + req.userData._id);
 
@@ -195,7 +203,7 @@ res.status(200).json(updatedGroup)
 
 // @desc    Delete group
 // @route   DELETE /api/groups/:id
-const deleteGroup = asyncHandler(async (req, res) => {
+export const deleteGroup = asyncHandler(async (req, res) => {
     const group = await Group.findById(req.params.id)
 
     if (!group) {
@@ -220,10 +228,193 @@ const deleteGroup = asyncHandler(async (req, res) => {
     res.status(200).json({id: req.params.id})
 })
 
-module.exports = {
-    getGroups,
-    creategroup,
 
-    deleteGroup,
-    updateEmail,
+
+
+
+// export const getGroupData = async (req, res) => {
+//   try {
+//     const groups = await Group.find({}); // Récupérer tous les groupes
+
+//     let totalProjects = 0;
+//     let totalDoneProjects = 0;
+
+//     // Parcourir chaque groupe
+//     for (const group of groups) {
+//       const groupId = group._id;
+
+//       // Récupérer les projets pour le groupe actuel
+//       const projects = await Project.find({ group: groupId });
+
+//       // Mettre à jour les totaux
+//       totalProjects += projects.length;
+//       totalDoneProjects += projects.filter((project) => project.status === 'done').length;
+//     }
+
+//     // Calculer le pourcentage de projets terminés
+//     const percentageDoneProjects = (totalDoneProjects / totalProjects) * 100;
+
+//     // Retourner les données globales
+//     res.status(200).json({
+//       totalGroups: groups.length,
+//       totalProjects,
+//       totalDoneProjects,
+//       percentageDoneProjects: percentageDoneProjects.toFixed(2),
+//     });
+//   } catch (error) {
+//     // Gérer les erreurs
+//     console.error('Une erreur s\'est produite :', error);
+//     res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération des données.' });
+//   }
+// };
+
+
+// export const getUserGroupData = async (req, res) => {
+//   try {
+//     const { email } = req.query;
+
+//     // Trouver l'utilisateur en fonction de son email
+//     const user = await User.find({ email: { $eq: email } });
+
+//     if (!user) {
+//       return res.status(404).json({ message: 'Utilisateur non trouvé' });
+//     }
+
+//     // Trouver tous les groupes de l'utilisateur
+//     const groups = await Group.find({ user: user.email});
+
+//     let totalProjects = 0;
+//     let totalDoneProjects = 0;
+
+//     // Parcourir chaque groupe
+//     for (const group of groups) {
+//       const groupId = group._id;
+
+//       // Récupérer les projets pour le groupe actuel
+//       const projects = await Project.find({ group: groupId });
+
+//       // Mettre à jour les totaux
+//       totalProjects += projects.length;
+//       totalDoneProjects += projects.filter((project) => project.status === 'done').length;
+//     }
+
+//     // Calculer le pourcentage de projets terminés
+//     const percentageDoneProjects = (totalDoneProjects / totalProjects) * 100;
+
+//     // Retourner les données globales
+//     res.status(200).json({
+//       userEmail: user.email,
+//       totalGroups: groups.length,
+//       totalProjects,
+//       totalDoneProjects,
+//       percentageDoneProjects: percentageDoneProjects.toFixed(2),
+//     });
+//   } catch (error) {
+//     // Gérer les erreurs
+//     console.error('Une erreur s\'est produite :', error);
+//     res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération des données.' });
+//   }
+// };
+
+
+
+
+
+// export const getUserGroupData = async (req, res) => {
+//   try {
+//     const { email } = req.query;
+
+//     // Trouver l'utilisateur en fonction de son email
+//  const user = await User.find({ email: { $eq: email } });
+
+//     if (!user) {
+//       return res.status(404).json({ message: 'Utilisateur non trouvé' });
+//     }
+
+//     // Trouver tous les groupes de l'utilisateur
+//     const groups = await Group.find({ user: user._id });
+
+//     let totalProjects = 0;
+//     let totalDoneProjects = 0;
+
+//     // Parcourir chaque groupe de l'utilisateur
+//     for (const group of groups) {
+//       const groupId = group._id;
+
+//       // Récupérer les projets pour le groupe actuel qui sont assignés à l'utilisateur
+//       const projects = await Project.find({ group: groupId, assignedto: email });
+
+//       // Mettre à jour les totaux
+//       totalProjects += projects.length;
+//       totalDoneProjects += projects.filter((project) => project.status === 'done').length;
+//     }
+
+//     // Calculer le pourcentage de projets terminés
+//     const percentageDoneProjects = (totalDoneProjects / totalProjects) * 100;
+
+//     // Retourner les données globales
+//     res.status(200).json({
+//       userEmail: user.email,
+//       totalGroups: groups.length,
+//       totalProjects,
+//       totalDoneProjects,
+//       percentageDoneProjects: percentageDoneProjects.toFixed(2),
+//     });
+//   } catch (error) {
+//     // Gérer les erreurs
+//     console.error('Une erreur s\'est produite :', error);
+//     res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération des données.' });
+//   }
+// };
+
+
+
+//const user = await User.find({ email: { $eq: email } });
+
+
+
+export const getUserGroupData = async (req, res) => {
+    const email = req.query.email;
+
+    try {
+      const projects = await Project.find({ assignedto: email }, 'name');
+      const projectNames = projects.map((project) => project.name);
+  
+      res.json(projectNames);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch project names' });
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// module.exports = {
+//     getGroups,
+//     creategroup,
+
+//     deleteGroup,
+//     updateEmail,
+// }
+export default {
+    getGroups,
+        creategroup,
+    
+        deleteGroup,
+        updateEmail,
+        getUserGroupData,
+  };

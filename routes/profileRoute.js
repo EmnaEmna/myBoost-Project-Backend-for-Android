@@ -1,11 +1,20 @@
-const express = require('express')
-const router = express.Router()
+// const express = require('express')
+// const router = express.Router()
+// const multer = require("../middleware/multer-config");
+import express from 'express';
+import multer from "../middleware/multer-config.js";
+
+const router = express.Router();
 
 
-const {
+
+
+import {
   resetPassword,
-  editUser,forgot_password,reset_password_get,reset_password_post
-} = require('../controllers/profilecontroller')
+  editUser,forgot_password,reset_password_get,reset_password_post,addProfilePic,getUserProfile
+} 
+
+ from '../controllers/profilecontroller.js'
 
 //const { protect } = require('../middleware/authMiddleware')
 
@@ -28,7 +37,11 @@ router
 .post(reset_password_post);
 
 
+// router.post('/addProfilePic', multer("profilePic", 512 * 1024), addProfilePic);
+
+router.put('/profilepic',multer("profilePic", 512 * 1024), addProfilePic);
+router.get('/profile', getUserProfile);
 
 
-
-module.exports = router
+// module.exports = router
+export default router;

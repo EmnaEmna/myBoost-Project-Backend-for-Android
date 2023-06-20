@@ -1,6 +1,11 @@
-const jwt = require('jsonwebtoken')
-const asyncHandler = require('express-async-handler')
-const User = require('../models/userModel')
+// const jwt = require('jsonwebtoken')
+// const asyncHandler = require('express-async-handler')
+// const User = require('../models/userModel')
+import jwt from 'jsonwebtoken';
+import asyncHandler from 'express-async-handler';
+import User from '../models/userModel.js';
+
+// Rest of your code...
 
 /*const protect = asyncHandler(async (req, res, next) => {
   let token
@@ -36,7 +41,7 @@ const User = require('../models/userModel')
   }
 })*/
 
-const protect = (req, res, next) => {
+export const protect = (req, res, next) => {
   //TODO: CHANGE FROM COOKIE TO HEADER WHEN MOVING TO ANDROID
   //const token = req.cookies.jwt;
   const token = req.headers['jwt']
@@ -60,4 +65,4 @@ const protect = (req, res, next) => {
 
 
 
-module.exports = { protect }
+// module.exports = { protect }

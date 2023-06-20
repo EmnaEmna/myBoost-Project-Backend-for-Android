@@ -1,23 +1,34 @@
-const express = require('express')
-const router = express.Router()
+// const express = require('express')
+// const router = express.Router()
+import express from 'express';
+const router = express.Router();
 
 
-const {
-  createproject,
-  getProjects
+// const {
+//   createproject,
+//   getProjects,
+//   getGroupEmails,
+//   updateProject
  
-} = require('../controllers/projectController')
+// } = require('../controllers/projectController')
 
-const { protectgroup } = require('../middleware/authMiddlewaregroup')
-
+import {
+  createproject,
+  getProjects,
+  getGroupEmails,
+  updateProject
+ 
+} from'../controllers/projectController.js'
 
 router.post('/createproject' ,createproject)
 router.post('/getProject',getProjects)
 
+router.get('/getEmails',getGroupEmails)
+
+
+router.put('/updateProject',updateProject)
 
 
 
 
-
-
-module.exports = router
+export default router;

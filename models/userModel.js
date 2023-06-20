@@ -1,8 +1,10 @@
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 
+import mongoose from 'mongoose';
 
 const userSchema = mongoose.Schema(
   {
+    
     
     email: {
       type: String,
@@ -21,7 +23,16 @@ const userSchema = mongoose.Schema(
 
     type: Array
   
-   }
+   },
+   role: {
+
+    type: String
+
+  },
+  profilePic: {
+    type: String,
+    required: false,
+},
      
   },
   {
@@ -40,4 +51,5 @@ const userSchema = mongoose.Schema(
       }
     ]
     */
-module.exports = mongoose.model('User', userSchema)
+// module.exports = mongoose.model('User', userSchema)
+export default mongoose.model('User', userSchema);

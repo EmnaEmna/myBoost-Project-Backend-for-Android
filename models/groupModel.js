@@ -1,5 +1,9 @@
-const mongoose = require('mongoose')
-const User = require('../models/userModel')
+// const mongoose = require('mongoose')
+// const User = require('../models/userModel')
+import mongoose from 'mongoose';
+import User from '../models/userModel.js';
+
+// Rest of your code...
 
 
 const groupSchema = mongoose.Schema(
@@ -37,4 +41,5 @@ const groupSchema = mongoose.Schema(
 
 
 
-module.exports = mongoose.model('Group', groupSchema)
+// module.exports = mongoose.model('Group', groupSchema)
+export default mongoose.model('Group', groupSchema);
